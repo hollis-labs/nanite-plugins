@@ -42,7 +42,7 @@ jobs:
       GH_TOKEN: ${{ secrets.CATALOG_TOKEN }}
       PLUGIN: ${{ needs.release.outputs.plugin }}
       VERSION: ${{ needs.release.outputs.version }}
-      CATALOG_REPO: ${{ vars.PLUGINS_CATALOG_REPO || 'hollis-labs/nanite-plugins-catalog' }}
+      CATALOG_REPO: ${{ vars.PLUGINS_CATALOG_REPO || 'hollis-labs/plugins-catalog' }}
     steps:
       - uses: actions/checkout@v5
         with:
