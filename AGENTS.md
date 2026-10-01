@@ -4,8 +4,9 @@ Every directory in the root Makefile's `PLUGINS` registry is a separate module.
 The registry also generates the CI matrix. There is no root Go module.
 
 Run `make all` from the root. CI pins golangci-lint v2.11.4 and tests each module
-with `GOWORK=off` and `-race`. Plugins import only the released public host
-contract and plugin-sdk; `scripts/check-dependencies.py` checks that boundary.
+with `GOWORK=off` and `-race`. Plugins import only the public host contract
+and plugin-sdk; publication requires stable release pins, while local review
+builds may use commit pins. `scripts/check-dependencies.py` checks that boundary.
 
 Generate plugin.yaml from the plugin binary with `--manifest`; never maintain a
 second manifest by hand. Use the shared manifest and Nanite extension validators.
