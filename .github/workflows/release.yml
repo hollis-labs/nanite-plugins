@@ -1,0 +1,74 @@
+name: Release plugin
+on:
+  push:
+    tags: ['*/v*']
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      plugin: ${{ steps.bundle.outputs.plugin }}
+      version: ${{ steps.bundle.outputs.version }}
+    env:
+      GOWORK: 'off'
+      REQUIRE_RELEASED_CONTRACTS: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.7'
+      - id: bundle
+        name: Validate tag and build release archives
+        run: |
+          plugin=${GITHUB_REF_NAME%%/v*}
+          version=${GITHUB_REF_NAME#*/v}
+          python3 scripts/release-bundle.py "$plugin" "$version"
+          printf 'plugin=%s\nversion=%s\n' "$plugin" "$version" >> "$GITHUB_OUTPUT"
+      - name: Publish archives and checksum metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PLUGIN: ${{ steps.bundle.outputs.plugin }}
+          VERSION: ${{ steps.bundle.outputs.version }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release/"$PLUGIN-$VERSION"/* --verify-tag --latest=false --title "$PLUGIN v$VERSION" --notes-file "$PLUGIN/CHANGELOG.md"
+  catalog:
+    needs: release
+    runs-on: ubuntu-latest
+    env:
+      GOWORK: 'off'
+      GH_TOKEN: ${{ secrets.CATALOG_TOKEN }}
+      PLUGIN: ${{ needs.release.outputs.plugin }}
+      VERSION: ${{ needs.release.outputs.version }}
+      CATALOG_REPO: ${{ vars.PLUGINS_CATALOG_REPO || 'hollis-labs/plugins-catalog' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: plugin-source
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ env.CATALOG_REPO }}
+          token: ${{ secrets.CATALOG_TOKEN }}
+          path: catalog-source
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: catalog-source/go.mod
+      - name: Download published declaration and seed entry
+        run: gh release download "$GITHUB_REF_NAME" --repo hollis-labs/nanite-plugins --dir release-assets --pattern plugin.yaml --pattern catalog-entry.json
+      - name: Prepare and validate catalog update
+        run: |
+          python3 plugin-source/scripts/update-catalog.py catalog-source release-assets
+          make -C catalog-source all
+      - name: Open catalog pull request
+        working-directory: catalog-source
+        run: |
+          branch="release/$PLUGIN-$VERSION"
+          git switch -c "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add plugins.json manifests
+          git commit -m "chore(catalog): release $PLUGIN v$VERSION"
+          git push origin "$branch"
+          gh pr create --repo "$CATALOG_REPO" --base main --head "$branch" --title "Release $PLUGIN v$VERSION" --body "Adds the published manifest and checksummed platform archives. Catalog validation passed in the release workflow."
