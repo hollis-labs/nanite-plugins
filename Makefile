@@ -1,4 +1,4 @@
-PLUGINS := example
+PLUGINS := example bookmarks
 
 .PHONY: all test lint dist plugins-json release-bundle clean
 
