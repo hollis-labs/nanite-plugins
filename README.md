@@ -16,6 +16,9 @@ session panel, slash command, agent tools, and verified core-data imports.
 The [Giphy](giphy/) plugin provides GIF search; [oEmbed](oembed/) provides
 provider link previews. Their envelope schemas ship with the UI assets.
 
+The headless [Loom integration](loom/) translates fragment callbacks into
+scoped curator wakes and contributes reminder defaults for Loom agents.
+
 ## Build
 
 ```sh
