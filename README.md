@@ -25,6 +25,9 @@ and pending reminder context with explicit acknowledgment and durable imports.
 The [Pins](pins/) plugin owns durable session/project context with a working
 drawer tab, agent tools and verified imports.
 
+The [Documents](documents/) plugin owns session text documents with uploads,
+pasted content and bounded full-content or pointer-summary context.
+
 ## Build
 
 ```sh
