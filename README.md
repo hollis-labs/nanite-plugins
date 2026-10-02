@@ -10,6 +10,9 @@ Each plugin is its own Go module and program. Plugins depend on the public
 The `example` plugin demonstrates a declared read-only tool and a React panel;
 it holds no user data and performs no host mutations.
 
+The [bookmarks](bookmarks/) plugin owns durable message bookmarks, with a
+session panel, slash command, agent tools, and verified core-data imports.
+
 ## Build
 
 ```sh
