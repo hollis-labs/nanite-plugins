@@ -25,6 +25,9 @@ and pending reminder context with explicit acknowledgment and durable imports.
 The [Pins](pins/) plugin owns durable session/project context with a working
 drawer tab, agent tools and verified imports.
 
+The [Plan](plan/) plugin owns scoped todos and multi-step plans with the nine
+work-tracking tools, a right-rail panel and atomic paired data imports.
+
 ## Build
 
 ```sh
