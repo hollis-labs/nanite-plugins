@@ -13,6 +13,9 @@ it holds no user data and performs no host mutations.
 The [bookmarks](bookmarks/) plugin owns durable message bookmarks, with a
 session panel, slash command, agent tools, and verified core-data imports.
 
+The [Giphy](giphy/) plugin provides GIF search; [oEmbed](oembed/) provides
+provider link previews. Their envelope schemas ship with the UI assets.
+
 ## Build
 
 ```sh
