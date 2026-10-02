@@ -1,4 +1,4 @@
-PLUGINS := example bookmarks giphy oembed loom
+PLUGINS := example bookmarks giphy oembed loom reminders
 
 .PHONY: all test lint dist plugins-json release-bundle clean
 

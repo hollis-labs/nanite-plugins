@@ -19,6 +19,9 @@ provider link previews. Their envelope schemas ship with the UI assets.
 The headless [Loom integration](loom/) translates fragment callbacks into
 scoped curator wakes and contributes reminder defaults for Loom agents.
 
+The [Reminders](reminders/) plugin contributes a working-drawer tab, agent tools
+and pending reminder context with explicit acknowledgment and durable imports.
+
 ## Build
 
 ```sh
