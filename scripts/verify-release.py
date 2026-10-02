@@ -25,8 +25,14 @@ for archive in entry["archives"]:
             raise SystemExit("archive escapes its root")
         if any(member.issym() or member.islnk() for member in tar.getmembers()):
             raise SystemExit("archive contains links")
-        required = {f"{plugin}/bin/{plugin}", f"{plugin}/plugin.yaml", f"{plugin}/ui/index.js"}
+        required = {f"{plugin}/bin/{plugin}", f"{plugin}/plugin.yaml"}
         extension = manifest.get("nanite", {})
+        for asset in (extension.get("ui", {}).get("bundle"), extension.get("ui", {}).get("stylesheet")):
+            if asset:
+                path = pathlib.PurePosixPath(asset)
+                if path.is_absolute() or ".." in path.parts:
+                    raise SystemExit("UI asset escapes bundle")
+                required.add(f"{plugin}/{path}")
         for envelope in extension.get("registers", {}).get("envelopes", []):
             schema = pathlib.PurePosixPath(envelope["schema"])
             if schema.is_absolute() or ".." in schema.parts:
