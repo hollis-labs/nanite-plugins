@@ -22,6 +22,9 @@ scoped curator wakes and contributes reminder defaults for Loom agents.
 The [Reminders](reminders/) plugin contributes a working-drawer tab, agent tools
 and pending reminder context with explicit acknowledgment and durable imports.
 
+The [Pins](pins/) plugin owns durable session/project context with a working
+drawer tab, agent tools and verified imports.
+
 ## Build
 
 ```sh
