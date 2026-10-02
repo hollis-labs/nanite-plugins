@@ -51,11 +51,16 @@ def run(plugin, version):
                 (stage / "bin").mkdir(parents=True)
                 subprocess.run(["go", "build", "-trimpath", "-ldflags=-s -w", "-o", str(stage / "bin" / plugin), "."], cwd=source, env=dict(env, GOOS=goos, GOARCH=goarch), check=True)
                 (stage / "plugin.yaml").write_bytes(manifest_raw)
-                ui = source / "ui"
-                if ui.exists():
-                    if any(path.is_symlink() for path in ui.rglob("*")):
-                        raise ValueError("UI release assets cannot be symlinks")
-                    shutil.copytree(ui, stage / "ui")
+                license_file = source / "LICENSE" if (source / "LICENSE").exists() else root / "LICENSE"
+                if license_file.is_symlink():
+                    raise ValueError("release license cannot be a symlink")
+                shutil.copyfile(license_file, stage / "LICENSE")
+                for asset_dir in ("ui", "schemas"):
+                    assets = source / asset_dir
+                    if assets.exists():
+                        if assets.is_symlink() or any(path.is_symlink() for path in assets.rglob("*")):
+                            raise ValueError("release assets cannot be symlinks")
+                        shutil.copytree(assets, stage / asset_dir)
                 name = f"{plugin}-{version}-{goos}-{goarch}.tar.gz"
                 archive = built / name
                 with tarfile.open(archive, "w:gz") as tar:
