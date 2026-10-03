@@ -31,6 +31,10 @@ pasted content and bounded full-content or pointer-summary context.
 The [Plan](plan/) plugin owns scoped todos and multi-step plans with the nine
 work-tracking tools, a right-rail panel and atomic paired data imports.
 
+The [Session Diagnostics](diagnostics/) plugin shows recorded usage, bounded
+recent execution metrics, latest captured slot accounting and pinned static
+prompt references through workspace-wide read authority, without content or mutations.
+
 ## Build
 
 ```sh
