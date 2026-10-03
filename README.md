@@ -28,6 +28,9 @@ drawer tab, agent tools and verified imports.
 The [Documents](documents/) plugin owns session text documents with uploads,
 pasted content and bounded full-content or pointer-summary context.
 
+The [Plan](plan/) plugin owns scoped todos and multi-step plans with the nine
+work-tracking tools, a right-rail panel and atomic paired data imports.
+
 ## Build
 
 ```sh
